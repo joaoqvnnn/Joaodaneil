@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0a0a0f" />
+<title>ADMIN BELLAMY — Larizinha Store</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-[#0a0a0f] text-gray-200 antialiased font-sans">
+
+<!-- ===================== LOADING OVERLAY ===================== -->
+<div id="loadingOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-[999] hidden items-center justify-center">
+  <div class="flex flex-col items-center gap-3">
+    <div class="w-12 h-12 border-4 border-purple-500/30 border-t-purple-500 rounded-full animate-spin"></div>
+    <span class="text-sm text-gray-400">Carregando...</span>
+  </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div id="toastContainer" class="fixed top-4 right-4 z-[1000] flex flex-col gap-2"></div>
+
+<!-- ===================== APP SHELL ===================== -->
+<div class="flex min-h-screen">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside id="sidebar" class="fixed lg:sticky top-0 left-0 z-40 h-screen w-72 bg-[#111118] border-r border-[#1e1e2a] flex flex-col -translate-x-full lg:translate-x-0 transition-transform duration-300">
+    <!-- Logo -->
+    <div class="px-5 py-5 border-b border-[#1e1e2a] flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center shadow-lg shadow-purple-600/30">
+        <i data-lucide="bot" class="w-5 h-5 text-white"></i>
+      </div>
+      <div class="leading-tight">
+        <h1 class="text-sm font-bold text-white tracking-wide">ADMIN BELLAMY</h1>
+        <p class="text-[11px] text-gray-500">Larizinha Store</p>
+      </div>
+      <button id="closeSidebarBtn" class="lg:hidden ml-auto text-gray-400 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="flex-1 overflow-y-auto py-3 px-2 space-y-0.5" id="sidebarNav">
+      <p class="px-3 pt-2 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Visão Geral</p>
+      <a href="#/dashboard" data-nav="dashboard" class="nav-item"><i data-lucide="layout-dashboard"></i><span>Dashboard</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Construção do Bot</p>
+      <a href="#/bot/menus" data-nav="bot-menus" class="nav-item"><i data-lucide="menu"></i><span>Menus & Fluxos</span></a>
+      <a href="#/bot/messages" data-nav="bot-messages" class="nav-item"><i data-lucide="message-square-text"></i><span>Mensagens</span></a>
+      <a href="#/bot/buttons" data-nav="bot-buttons" class="nav-item"><i data-lucide="mouse-pointer-click"></i><span>Botões Inline</span></a>
+      <a href="#/bot/commands" data-nav="bot-commands" class="nav-item"><i data-lucide="terminal"></i><span>Comandos</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Catálogo</p>
+      <a href="#/products" data-nav="products" class="nav-item"><i data-lucide="package"></i><span>Produtos</span></a>
+      <a href="#/stock" data-nav="stock" class="nav-item"><i data-lucide="boxes"></i><span>Estoque & Credenciais</span></a>
+      <a href="#/orders" data-nav="orders" class="nav-item"><i data-lucide="receipt"></i><span>Pedidos & Entregas</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Financeiro</p>
+      <a href="#/finance" data-nav="finance" class="nav-item"><i data-lucide="wallet"></i><span>Financeiro</span></a>
+      <a href="#/pix" data-nav="pix" class="nav-item"><i data-lucide="qr-code"></i><span>PIX & Pagamentos</span></a>
+      <a href="#/gifts" data-nav="gifts" class="nav-item"><i data-lucide="gift"></i><span>Gift Cards</span></a>
+      <a href="#/affiliates" data-nav="affiliates" class="nav-item"><i data-lucide="users-round"></i><span>Afiliados & Pontos</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Usuários</p>
+      <a href="#/users" data-nav="users" class="nav-item"><i data-lucide="user-circle"></i><span>Usuários</span></a>
+      <a href="#/rankings" data-nav="rankings" class="nav-item"><i data-lucide="trophy"></i><span>Rankings</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Engajamento</p>
+      <a href="#/promos" data-nav="promos" class="nav-item"><i data-lucide="megaphone"></i><span>Promoções</span></a>
+      <a href="#/automations" data-nav="automations" class="nav-item"><i data-lucide="zap"></i><span>Automações</span></a>
+      <a href="#/support" data-nav="support" class="nav-item"><i data-lucide="headphones"></i><span>Atendimento</span></a>
+
+      <p class="px-3 pt-4 pb-1 text-[10px] uppercase tracking-widest text-gray-600 font-semibold">Sistema</p>
+      <a href="#/maintenance" data-nav="maintenance" class="nav-item"><i data-lucide="wrench"></i><span>Modo Manutenção</span></a>
+      <a href="#/settings" data-nav="settings" class="nav-item"><i data-lucide="settings"></i><span>Configurações</span></a>
+      <a href="#/permissions" data-nav="permissions" class="nav-item"><i data-lucide="shield-check"></i><span>Permissões</span></a>
+      <a href="#/logs" data-nav="logs" class="nav-item"><i data-lucide="scroll-text"></i><span>Logs & Auditoria</span></a>
+    </nav>
+
+    <!-- Footer -->
+    <div class="px-4 py-3 border-t border-[#1e1e2a] flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-600 flex items-center justify-center text-white text-sm font-bold" id="adminAvatar">A</div>
+      <div class="leading-tight flex-1 min-w-0">
+        <p class="text-xs font-semibold text-white truncate" id="adminName">Administrador</p>
+        <p class="text-[10px] text-gray-500" id="adminRole">Proprietário</p>
+      </div>
+      <button onclick="logout()" class="text-gray-500 hover:text-red-400 transition">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Overlay para sidebar mobile -->
+  <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="flex-1 flex flex-col min-w-0">
+
+    <!-- Topbar -->
+    <header class="sticky top-0 z-20 bg-[#0a0a0f]/90 backdrop-blur border-b border-[#1e1e2a] px-4 lg:px-6 py-3 flex items-center gap-3">
+      <button id="openSidebarBtn" class="lg:hidden text-gray-400 hover:text-white">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+      <div class="flex-1 min-w-0">
+        <h2 id="pageTitle" class="text-base lg:text-lg font-bold text-white truncate">Dashboard</h2>
+        <p id="pageSubtitle" class="text-[11px] text-gray-500 truncate">Visão geral do bot</p>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="topbar-btn" title="Buscar"><i data-lucide="search" class="w-4 h-4"></i></button>
+        <button class="topbar-btn relative" title="Notificações">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+        </button>
+        <button class="topbar-btn" title="Atualizar" onclick="refreshView()">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content -->
+    <main id="mainContent" class="flex-1 p-4 lg:p-6 pb-24 overflow-x-hidden">
+      <!-- SPA: as seções abaixo são injetadas/trocadas via JS -->
+    </main>
+  </div>
+</div>
+
+<!-- ===================== MODAIS ===================== -->
+<div id="modalRoot" class="fixed inset-0 z-[500] hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeModal()"></div>
+  <div class="relative flex items-center justify-center min-h-full p-4">
+    <div id="modalBox" class="w-full max-w-2xl bg-[#13131c] border border-[#252536] rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"></div>
+  </div>
+</div>
+
+<!-- ===================== CONFIRM DIALOG ===================== -->
+<div id="confirmDialog" class="fixed inset-0 z-[600] hidden">
+  <div class="absolute inset-0 bg-black/80" onclick="closeConfirm(false)"></div>
+  <div class="relative flex items-center justify-center min-h-full p-4">
+    <div class="w-full max-w-sm bg-[#13131c] border border-[#252536] rounded-2xl p-5">
+      <h3 id="confirmTitle" class="text-white font-semibold mb-2">Confirmar</h3>
+      <p id="confirmMessage" class="text-sm text-gray-400 mb-5">Tem certeza?</p>
+      <div class="flex gap-2">
+        <button onclick="closeConfirm(false)" class="flex-1 py-2.5 rounded-lg bg-[#1e1e2a] hover:bg-[#252536] text-sm font-semibold text-gray-300 transition">Cancelar</button>
+        <button onclick="closeConfirm(true)" class="flex-1 py-2.5 rounded-lg bg-red-600 hover:bg-red-500 text-sm font-semibold text-white transition">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FLOATING ACTION (mobile) ===================== -->
+<button id="fab" class="fixed bottom-5 right-5 w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-fuchsia-600 text-white shadow-xl shadow-purple-600/40 flex items-center justify-center z-30 hover:scale-105 transition" title="Ação rápida">
+  <i data-lucide="plus" class="w-6 h-6"></i>
+</button>
+
+<script>
+  // Inicializa ícones Lucide
+  if (window.lucide) lucide.createIcons();
+</script>
+<script src="app.js"></script>
+</body>
+</html>
