@@ -1,0 +1,38 @@
+# =========================================================
+# ADMIN BELLAMY — Larizinha Store
+# Backend Python — FastAPI + aiogram + PostgreSQL
+# =========================================================
+
+# ---- Web / API ----
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20
+
+# ---- Bot Telegram ----
+aiogram==3.15.0
+
+# ---- Banco de dados ----
+sqlalchemy[asyncio]==2.0.36
+asyncpg==0.30.0
+alembic==1.14.0
+
+# ---- Configuração / validação ----
+pydantic==2.10.4
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
+
+# ---- HTTP client (PIX, APIs externas) ----
+httpx==0.28.1
+
+# ---- QR Code (PIX) ----
+qrcode[pil]==8.0
+pillow==11.0.0
+
+# ---- Exportação PDF (extrato afiliados) ----
+fpdf2==2.8.2
+
+# ---- Templates HTML (opcional, caso use Jinja) ----
+jinja2==3.1.5
+
+# ---- Arquivos assíncronos ----
+aiofiles==24.1.0
